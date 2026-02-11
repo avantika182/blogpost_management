@@ -1,9 +1,10 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Register.css";
 
 const Register = () => {
   
-
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -138,7 +139,7 @@ const Register = () => {
       </form>
 
       <p className="link-text">
-        Already have an account? Login here
+         Already have an account? <Link to="/login">Login here</Link>
       </p>
     </div>
   );
