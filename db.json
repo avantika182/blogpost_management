@@ -1,0 +1,28 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "Title 1",
+      "description": "Loarm Ipsum is simply dummy text",
+      "author": "Siddhapura Avantika",
+      "image": "",
+      "createAt": "2026-02-06t11:04:10.992z"
+    },
+    {
+      "id": "2",
+      "title": "Title 2",
+      "description": "Loarm Ipsum is simply dummy text",
+      "author": "Siddhapura Avni",
+      "image": "",
+      "createAt": "2026-02-06t11:04:10.992z"
+    },
+    {
+      "id": "3",
+      "title": "Title 3",
+      "description": "Loarm Ipsum is simply dummy text",
+      "author": "xjjjjkk",
+      "image": "",
+      "createAt": "2026-02-06t11:04:10.992z"
+    }
+  ]
+}
