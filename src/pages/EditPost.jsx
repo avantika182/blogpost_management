@@ -8,10 +8,10 @@ import {
 } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import "./CreatePost.css";
-import Navbar from "../Componants/Navbar";
+import Navbar from "../Component/Navbar";
 
-function CreatePost() {
-  const { id } = useParams(); // for edit
+function EditPost() {
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const autherName = JSON.parse(localStorage.getItem("blog_rdata"));
@@ -28,25 +28,24 @@ function CreatePost() {
   const [imagePreview, setImagePreview] = useState(null);
   const [error, setError] = useState({});
 
+  // Fetch post for edit
   useEffect(() => {
-    if (id) {
-      fetch(`http://localhost:3000/posts/${id}`)
-        .then((res) => res.json())
-        .then((post) => {
-          setData({
-            title: post.title || "",
-            description: post.description || "",
-            auther: post.auther || "",
-            imageUrl: post.imageUrl || "",
-            imageType: post.imageUrl?.startsWith("data:")
-              ? "file"
-              : "url",
-          });
+    fetch(`http://localhost:3000/posts/${id}`)
+      .then((res) => res.json())
+      .then((post) => {
+        setData({
+          title: post.title || "",
+          description: post.description || "",
+          auther: post.auther || "",
+          imageUrl: post.imageUrl || "",
+          imageType: post.imageUrl?.startsWith("data:")
+            ? "file"
+            : "url",
+        });
 
-          setImagePreview(post.imageUrl || null);
-        })
-        .catch((err) => console.error("Edit fetch error:", err));
-    }
+        setImagePreview(post.imageUrl || null);
+      })
+      .catch((err) => console.error("Edit fetch error:", err));
   }, [id]);
 
   const handleChange = (e) => {
@@ -96,6 +95,7 @@ function CreatePost() {
     setError(newError);
     return Object.keys(newError).length === 0;
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
@@ -109,45 +109,39 @@ function CreatePost() {
     };
 
     try {
-      const res = await fetch(
-        id
-          ? `http://localhost:3000/posts/${id}`
-          : "http://localhost:3000/posts",
-        {
-          method: id ? "PUT" : "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(postData),
-        }
-      );
+      const res = await fetch(`http://localhost:3000/posts/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(postData),
+      });
 
-      if (!res.ok) throw new Error("Save failed");
+      if (!res.ok) throw new Error("Update failed");
 
-      alert(id ? "Post Updated!" : "Post Created!");
+      alert("Post Updated!");
       navigate("/dashboard");
     } catch (err) {
       console.error(err);
-      alert("Error saving post");
+      alert("Error updating post");
     }
   };
+
   const handleDelete = async () => {
-  if (!id) return;
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
 
-  if (!window.confirm("Are you sure you want to delete this post?")) return;
+    try {
+      const res = await fetch(`http://localhost:3000/posts/${id}`, {
+        method: "DELETE",
+      });
 
-  try {
-    const res = await fetch(`http://localhost:3000/posts/${id}`, {
-      method: "DELETE",
-    });
+      if (!res.ok) throw new Error("Delete failed");
 
-    if (!res.ok) throw new Error("Delete failed");
-
-    alert("Post Deleted Successfully!");
-    navigate("/dashboard");
-  } catch (err) {
-    console.error(err);
-    alert("Error deleting post");
-  }
-};
+      alert("Post Deleted Successfully!");
+      navigate("/dashboard");
+    } catch (err) {
+      console.error(err);
+      alert("Error deleting post");
+    }
+  };
 
   return (
     <div className="create-post-page">
@@ -155,12 +149,13 @@ function CreatePost() {
 
       <div className="create-post-container">
         <header className="form-header">
-          <h1>{id ? "Edit Post" : "Create New Post"}</h1>
-          <p>Share Your Thoughts and Stories With The World.</p>
+          <h1>Edit Post</h1>
+          <p>Update your story and make it better.</p>
         </header>
 
         <div className="post-form-card">
           <form onSubmit={handleSubmit}>
+            {/* TITLE */}
             <div className="form-group">
               <label>Post Title</label>
               <div className="input-wrapper">
@@ -174,7 +169,10 @@ function CreatePost() {
                   placeholder="Enter your catchy title..."
                 />
               </div>
+              {error.title && <p className="error-text">{error.title}</p>}
             </div>
+
+            {/* AUTHOR */}
             <div className="form-group">
               <label>Author Name</label>
               <div className="input-wrapper">
@@ -188,7 +186,10 @@ function CreatePost() {
                   placeholder="Your Name"
                 />
               </div>
+              {error.auther && <p className="error-text">{error.auther}</p>}
             </div>
+
+            {/* DESCRIPTION */}
             <div className="form-group">
               <label>Description</label>
               <textarea
@@ -198,6 +199,9 @@ function CreatePost() {
                 onChange={handleChange}
                 placeholder="What's in your mind?"
               />
+              {error.description && (
+                <p className="error-text">{error.description}</p>
+              )}
             </div>
 
             {/* IMAGE */}
@@ -206,11 +210,7 @@ function CreatePost() {
 
               {imagePreview ? (
                 <div className="image-preview-container">
-                  <img
-                    src={imagePreview}
-                    alt="preview"
-                    className="image-preview"
-                  />
+                  <img src={imagePreview} alt="preview" className="image-preview" />
                   <button
                     type="button"
                     className="remove-image-btn"
@@ -251,10 +251,7 @@ function CreatePost() {
                       onChange={handleImageUrlChange}
                     />
                   ) : (
-                    <div
-                      className="image-upload-area"
-                      onClick={triggerFileSelect}
-                    >
+                    <div className="image-upload-area" onClick={triggerFileSelect}>
                       <FaCloudUploadAlt className="upload-icon" />
                       <p>Click to upload image</p>
                       <input
@@ -271,35 +268,32 @@ function CreatePost() {
             </div>
 
             {/* BUTTONS */}
-          <div className="form-actions-row">
-  <button type="submit" className="submit-btn">
-    <FaRegPaperPlane /> {id ? "Update Post" : "Publish Post"}
-  </button>
+            <div className="form-actions-row">
+              <button type="submit" className="submit-btn">
+                <FaRegPaperPlane /> Update Post
+              </button>
 
-  <button
-    type="button"
-    className="cancel-btn"
-    onClick={() => navigate("/dashboard")}
-  >
-    Cancel
-  </button>
+              <button
+                type="button"
+                className="cancel-btn"
+                onClick={() => navigate("/dashboard")}
+              >
+                Cancel
+              </button>
 
-  {id && (
-    <button
-      type="button"
-      className="delete-btn"
-      onClick={handleDelete}
-    >
-      Delete Post
-    </button>
-  )}
-</div>
-
-      </form>
+              <button
+                type="button"
+                className="delete-btn"
+                onClick={handleDelete}
+              >
+                Delete Post
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   );
 }
 
-export default CreatePost;
+export default EditPost;
