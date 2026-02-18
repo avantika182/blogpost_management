@@ -8,7 +8,7 @@ import {
 } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
 import "./CreatePost.css";
-import Navbar from "../Component/Navbar";
+import Navbar from "../Componants/Navbar";
 
 function EditPost() {
   const { id } = useParams();

@@ -9,37 +9,19 @@ function Dashboard() {
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
 
-  // Fetch posts
   const fetchData = async () => {
     try {
       const response = await fetch("http://localhost:3000/posts");
       const data = await response.json();
       setPosts(data);
     } catch (error) {
-      console.log("Fetch error:", error);
+      console.log(error);
     }
   };
 
   useEffect(() => {
     fetchData();
   }, []);
-
-  // Delete post
-  const deletePost = async (id) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this post?");
-    if (!confirmDelete) return;
-
-    try {
-      await fetch(`http://localhost:3000/posts/${id}`, {
-        method: "DELETE",
-      });
-
-      // Update UI after delete
-      setPosts(posts.filter((post) => post.id !== id));
-    } catch (error) {
-      console.log("Delete error:", error);
-    }
-  };
 
   return (
     <div className="dashboard-page">
@@ -93,18 +75,17 @@ function Dashboard() {
                   />
 
                   <div className="post-actions">
-                    <button
-                      className="action-btn edit-btn"
-                      title="Edit Post"
-                      onClick={() => navigate(`/edit-post/${post.id}`)}
-                    >
-                      <MdEdit size={22} color="white" />
-                    </button>
+                   <button
+  className="action-btn edit-btn"
+  title="Edit Post"
+  onClick={() => navigate(`/edit-post/${post.id}`)}
+>
+  <MdEdit size={22} color="white" />
+</button>
 
                     <button
                       className="action-btn delete-btn"
                       title="Delete Post"
-                      onClick={() => deletePost(post.id)}
                     >
                       <MdDelete size={22} color="white" />
                     </button>
@@ -114,7 +95,7 @@ function Dashboard() {
                 <div className="post-card-content">
                   <div className="post-meta">
                     <span className="post-author">
-                      By {post.author}
+                      By {post.auther}
                     </span>
                     <span className="post-date">
                       {new Date(post.createdAt).toDateString()}
@@ -127,12 +108,7 @@ function Dashboard() {
                     {post.description}
                   </p>
 
-                  <button
-                    className="read-more-btn"
-                    onClick={() => navigate(`/post-detail/${post.id}`)}
-                  >
-                    Read More
-                  </button>
+                  <button className="read-more-btn"   onClick={() => navigate(`/post-detail/${post.id}`)}>Read More</button>
                 </div>
               </div>
             ))}

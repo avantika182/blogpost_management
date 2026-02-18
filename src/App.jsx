@@ -1,11 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import CreatePost from "./pages/CreatePost";
+import EditPost from "./pages/EditPost";
+import Analytics from "./pages/Analytics";
+import PostDetails from "./pages/PostDetails";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -16,11 +18,19 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create-post" element={<CreatePost />} />
+        <Route path="/post-detail/:id" element={<PostDetails />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/edit-post/:id" element={<EditPost />} />
       </Routes>
 
       <ToastContainer
         position="top-right"
         autoClose={1000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
         theme="light"
       />
     </>
