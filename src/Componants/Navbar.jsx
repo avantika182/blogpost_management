@@ -44,7 +44,7 @@ const Navbar = () => {
         </div>
         <div className="navbar-action">
           <span className="user-name">
-            Hi,User {authData?.name?.split("")[0] || "User"}
+            Hi,User {authData?.name?.split(" ")[0] || "User"}
           </span>
           <button
             className="theme-toggle-btn"

@@ -15,7 +15,7 @@ function Dashboard() {
       const data = await response.json();
       setPosts(data);
     } catch (error) {
-      console.log(error);
+      console.log("Fetch Error:", error);
     }
   };
 
@@ -23,9 +23,22 @@ function Dashboard() {
     fetchData();
   }, []);
 
+  const handleDelete = async (id) => {
+    try {
+      await fetch(`http://localhost:3000/posts/${id}`, {
+        method: "DELETE",
+      });
+
+      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
+    } catch (error) {
+      console.log("Delete Error:", error);
+    }
+  };
+
   return (
     <div className="dashboard-page">
       <Navbar />
+
       <main className="dashbord-main">
         <div className="dashboard-welcome">
           <div className="welcome-text">
@@ -56,6 +69,7 @@ function Dashboard() {
         <section className="posts-section">
           <div className="section-header">
             <h2 className="section-title">Recent Feed</h2>
+
             <button
               className="create-shortcut-btn"
               onClick={() => navigate("/create-post")}
@@ -75,17 +89,18 @@ function Dashboard() {
                   />
 
                   <div className="post-actions">
-                   <button
-  className="action-btn edit-btn"
-  title="Edit Post"
-  onClick={() => navigate(`/edit-post/${post.id}`)}
->
-  <MdEdit size={22} color="white" />
-</button>
+                    <button
+                      className="action-btn edit-btn"
+                      title="Edit Post"
+                      onClick={() => navigate(`/edit-post/${post.id}`)}
+                    >
+                      <MdEdit size={22} color="white" />
+                    </button>
 
                     <button
                       className="action-btn delete-btn"
                       title="Delete Post"
+                      onClick={() => handleDelete(post.id)}
                     >
                       <MdDelete size={22} color="white" />
                     </button>
@@ -97,6 +112,7 @@ function Dashboard() {
                     <span className="post-author">
                       By {post.auther}
                     </span>
+
                     <span className="post-date">
                       {new Date(post.createdAt).toDateString()}
                     </span>
@@ -108,7 +124,12 @@ function Dashboard() {
                     {post.description}
                   </p>
 
-                  <button className="read-more-btn"   onClick={() => navigate(`/post-detail/${post.id}`)}>Read More</button>
+                  <button
+                    className="read-more-btn"
+                    onClick={() => navigate(`/post-detail/${post.id}`)}
+                  >
+                    Read More
+                  </button>
                 </div>
               </div>
             ))}
