@@ -6,6 +6,8 @@ import CreatePost from "./pages/CreatePost";
 import EditPost from "./pages/EditPost";
 import Analytics from "./pages/Analytics";
 import PostDetails from "./pages/PostDetails";
+import AuthGuard from "./auth/AuthGuard";
+import Favorites from "./pages/Favorites";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -14,13 +16,77 @@ function App() {
     <>
       <Routes>
         <Route path="/" element={<Navigate to="/register" />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/create-post" element={<CreatePost />} />
-        <Route path="/post-detail/:id" element={<PostDetails />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/edit-post/:id" element={<EditPost />} />
+
+        <Route
+          path="/register"
+          element={
+            <AuthGuard required={false}>
+              <Register />
+            </AuthGuard>
+          }
+        />
+
+        <Route
+          path="/login"
+          element={
+            <AuthGuard required={false}>
+              <Login />
+            </AuthGuard>
+          }
+        />
+
+        <Route
+          path="/dashboard"
+          element={
+            <AuthGuard>
+              <Dashboard />
+            </AuthGuard>
+          }
+        />
+
+        <Route
+          path="/create-post"
+          element={
+            <AuthGuard>
+              <CreatePost />
+            </AuthGuard>
+          }
+        />
+
+        <Route
+          path="/post-detail/:id"
+          element={
+            <AuthGuard>
+              <PostDetails />
+            </AuthGuard>
+          }
+        />
+
+        <Route
+          path="/analytics"
+          element={
+            <AuthGuard>
+              <Analytics />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/favorites"
+          element={
+            <AuthGuard>
+              <Favorites/>
+            </AuthGuard>
+          }
+          />
+
+        <Route
+          path="/edit-post/:id"
+          element={
+            <AuthGuard>
+              <EditPost />
+            </AuthGuard>
+          }
+        />
       </Routes>
 
       <ToastContainer

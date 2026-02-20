@@ -22,7 +22,7 @@ function CreatePost() {
     description: "",
     auther: autherName?.name || "",
     imageUrl: "",
-    imageType: "Url",
+    imageType: "url",
   });
 
   const fileInputRef = useRef(null);

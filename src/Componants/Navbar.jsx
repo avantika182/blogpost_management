@@ -9,6 +9,7 @@ import {
   FaChartLine,
   FaMoon,
   FaSun,
+  FaStar,
 } from "react-icons/fa";
 import { useTheme } from "../context/ThemeContext";
 const Navbar = () => {
@@ -40,6 +41,10 @@ const Navbar = () => {
           <NavLink to="/analytics" className="nav-item">
             <FaChartLine className="nav-icon" />
             Analysis
+          </NavLink>
+          <NavLink to="/favorites" className="nav-item">
+          <FaStar className="nav-icon"/>
+            Favorites
           </NavLink>
         </div>
         <div className="navbar-action">
